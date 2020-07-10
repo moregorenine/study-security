@@ -29,36 +29,35 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated();
 
         http
-                .formLogin();
+                .formLogin()
 //                .loginPage("/loginPage")
-//                .defaultSuccessUrl("/")
-//                .failureUrl("/login")
-//                .usernameParameter("userId")
-//                .passwordParameter("passWd")
-//                .loginProcessingUrl("/login-proc")
-//                .successHandler(new AuthenticationSuccessHandler() {
-//                    @Override
-//                    public void onAuthenticationSuccess(
-//                            HttpServletRequest httpServletRequest,
-//                            HttpServletResponse httpServletResponse,
-//                            Authentication authentication) throws IOException, ServletException {
-//                        System.out.println("authentication = " + authentication.getName());
-//                        httpServletResponse.sendRedirect("/");
-//                    }
-//                })
-//                .failureHandler(new AuthenticationFailureHandler() {
-//                    @Override
-//                    public void onAuthenticationFailure(
-//                            HttpServletRequest httpServletRequest,
-//                            HttpServletResponse httpServletResponse,
-//                            AuthenticationException exception) throws IOException, ServletException {
-//                        System.out.println("exception = " + exception.getMessage());
-//                        httpServletResponse.sendRedirect("/login");
-//                    }
-//                })
-//                .permitAll();
-
-        http
+                .defaultSuccessUrl("/")
+                .failureUrl("/login")
+                .usernameParameter("userId")
+                .passwordParameter("passWd")
+                .loginProcessingUrl("/login-proc")
+                .successHandler(new AuthenticationSuccessHandler() {
+                    @Override
+                    public void onAuthenticationSuccess(
+                            HttpServletRequest httpServletRequest,
+                            HttpServletResponse httpServletResponse,
+                            Authentication authentication) throws IOException, ServletException {
+                        System.out.println("authentication = " + authentication.getName());
+                        httpServletResponse.sendRedirect("/");
+                    }
+                })
+                .failureHandler(new AuthenticationFailureHandler() {
+                    @Override
+                    public void onAuthenticationFailure(
+                            HttpServletRequest httpServletRequest,
+                            HttpServletResponse httpServletResponse,
+                            AuthenticationException exception) throws IOException, ServletException {
+                        System.out.println("exception = " + exception.getMessage());
+                        httpServletResponse.sendRedirect("/login");
+                    }
+                })
+                .permitAll()
+            .and()
                 .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
@@ -77,7 +76,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         httpServletResponse.sendRedirect("/login");
                     }
                 })
-                .deleteCookies("remember-me");
+            .and()
+                .rememberMe()
+                .rememberMeParameter("remember")
+                .tokenValiditySeconds(3600)
+                .userDetailsService(userDetailsService());
     }
-    
+
 }
